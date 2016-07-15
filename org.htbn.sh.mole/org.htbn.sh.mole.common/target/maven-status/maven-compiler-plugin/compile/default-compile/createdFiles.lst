@@ -1,0 +1,13 @@
+org\htbn\sh\mole\common\enums\ActionType.class
+org\htbn\sh\mole\common\bean\MoleTemplate.class
+org\htbn\sh\mole\common\enums\ActionStatus.class
+org\htbn\sh\mole\common\enums\InstanceStatus.class
+org\htbn\sh\mole\common\util\DateUtil.class
+org\htbn\sh\mole\common\enums\TemplateType.class
+org\htbn\sh\mole\common\bean\MoleActionInstance.class
+org\htbn\sh\mole\common\bean\MoleActionTemplate.class
+org\htbn\sh\mole\common\io\BizActionDemoImpl.class
+org\htbn\sh\mole\common\io\BizBeanDemo.class
+org\htbn\sh\mole\common\io\BizAction.class
+org\htbn\sh\mole\common\util\BNBeanUtil.class
+org\htbn\sh\mole\common\bean\MoleInstance.class

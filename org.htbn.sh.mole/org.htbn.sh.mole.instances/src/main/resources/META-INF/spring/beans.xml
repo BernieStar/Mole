@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/mvc 
+       http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+       http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/cache 
+       http://www.springframework.org/schema/cache/spring-cache-3.1.xsd
+       ">
+
+	<context:component-scan base-package="org.htbn.sh.mole.instances.**" />
+
+	<bean id="log4jInitialization"
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetClass" value="org.springframework.util.Log4jConfigurer" />
+		<property name="targetMethod" value="initLogging" />
+		<property name="arguments">
+			<list>
+				<value>classpath:META-INF/log4j.properties</value>
+			</list>
+		</property>
+	</bean>
+	<cache:annotation-driven cache-manager="cacheManager" />
+	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+	    <property name="caches">
+	      <set>
+	        <bean class="org.htbn.sh.mole.instances.redis.RedisCacheImpl">
+	          <property name="redisTemplate" ref="redisTemplate" />
+	          <property name="name" value="default"/>
+	        </bean>
+	      </set>
+	    </property>
+	</bean>
+	<!-- jedis 配置 -->
+	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxIdle" value="100" />
+		<property name="maxWaitMillis" value="1000" />
+		<property name="testOnBorrow" value="true" />
+	</bean>
+
+	<!-- redis服务器中心 -->
+	<bean id="connectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<property name="poolConfig" ref="poolConfig" />
+		<property name="port" value="6379" />
+		<property name="hostName" value="127.0.0.1" />
+		<!-- <property name="password" value="${redis.password}" /> -->
+		<property name="timeout" value="10000"></property>
+	</bean>
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="keySerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+		<property name="valueSerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+		</property>
+	</bean>
+	
+
+	<!-- cache配置 -->
+<!-- 	<bean id="methodCacheInterceptor" class="org.htbn.sh.mole.instances.redis.MethodCacheInterceptor"> -->
+<!-- 		<property name="redisTemplate" ref="redisTemplate" /> -->
+<!-- 	</bean> -->
+
+	<!-- aop配置切点跟通知 -->
+<!-- 	<bean id="methodCachePointCut" -->
+<!-- 		class="org.springframework.aop.support.RegexpMethodPointcutAdvisor"> -->
+<!-- 		<property name="advice" ref="methodCacheInterceptor" /> -->
+<!-- 		<property name="pattern" value=".*ServiceImpl.*" /> -->
+<!-- 	</bean> -->
+
+<!-- 	<bean -->
+<!-- 		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" /> -->
+
+
+</beans>

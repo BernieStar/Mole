@@ -1,7 +1,6 @@
 package org.htbn.sh.mole.common.bean;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 import org.htbn.sh.mole.common.enums.InstanceStatus;

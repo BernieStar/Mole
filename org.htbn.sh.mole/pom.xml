@@ -12,9 +12,11 @@
   	<module>org.htbn.sh.mole.instances</module>
   	<module>org.htbn.sh.mole.templates</module>
   	<module>org.htbn.sh.mole.api</module>
+  	<module>org.htbn.sh.mole.test</module>
+  	<module>org.htbn.sh.mole.analyzer</module>
   </modules>
   <properties>
-		<org.springframework.version>4.1.8.RELEASE</org.springframework.version>
+		<spring_version>3.2.16.RELEASE</spring_version>
 		<org.springframework.security>4.0.3.RELEASE</org.springframework.security>
 	</properties>
 	<!-- Spring MyBatis Druid JDBC Fastjson log4j JSTL -->
@@ -43,48 +45,69 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${org.springframework.version}</version>
+			<version>${spring_version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
-			<version>${org.springframework.security}</version>
+			<version>${spring_version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
-			<version>${org.springframework.version}</version>
+			<version>${spring_version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-oxm</artifactId>
-			<version>${org.springframework.version}</version>
+			<version>${spring_version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
-			<version>${org.springframework.version}</version>
+			<version>${spring_version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
-			<version>${org.springframework.version}</version>
+			<version>${spring_version}</version>
 		</dependency>
-		
-		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring_version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring_version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
-			<version>${org.springframework.version}</version>
+			<version>${spring_version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>${org.springframework.version}</version>
+			<version>${spring_version}</version>
 			<scope>test</scope>
 		</dependency>
-		
-		
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${org.springframework.security}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${org.springframework.security}</version>
+		</dependency>
+		<dependency>
+	        <groupId>org.springframework.data</groupId>
+	        <artifactId>spring-data-mongodb</artifactId>
+	        <version>1.5.4.RELEASE</version>
+	    </dependency>
 		<!-- SpringOXM -->
 		<dependency>
 			<groupId>org.codehaus.castor</groupId>
@@ -197,5 +220,85 @@
 			<artifactId>commons-email</artifactId>
 			<version>1.4</version>
 		</dependency>
+		<!-- Dubbo -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>dubbo</artifactId>
+			<version>2.5.4-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+	            <groupId>org.apache.zookeeper</groupId>
+				<artifactId>zookeeper</artifactId>
+				<version>3.3.3</version>
+	        </dependency>
+	  
+	      <dependency>
+	     	 <groupId>com.github.sgroschupf</groupId>
+			 <artifactId>zkclient</artifactId>
+			 <version>0.1</version>
+	      </dependency>
+		<!-- Dubbo End-->
+		 <!-- Redis -->
+		  <dependency>
+		   <groupId>org.springframework.data</groupId>
+		   <artifactId>spring-data-redis</artifactId>
+		   <version>1.6.1.RELEASE</version>
+		  </dependency>
+		  <dependency>
+		   <groupId>redis.clients</groupId>
+		   <artifactId>jedis</artifactId>
+		   <version>2.7.3</version>
+		  </dependency>
+		  <!-- Redis -->
 	</dependencies>
+	<repositories>
+		<repository>
+            <id>central</id>
+            <name>Maven Repository Switchboard</name>
+            <layout>default</layout>
+            <url>http://repo1.maven.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+		<repository>
+            <id>opensesame</id>
+            <url>https://github.com/alibaba/opensesame</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+    		<pluginRepository>
+    			<id>nexus</id>
+    			<name>local private nexus</name>
+    			<url>http://maven.oschina.net/content/groups/public/</url>
+    			<releases>
+    				<enabled>true</enabled>
+    			</releases>
+    			<snapshots>
+    				<enabled>false</enabled>
+    			</snapshots>
+    		</pluginRepository>
+    		
+    </pluginRepositories>
+    <build><plugins>
+			<!-- compiler插件,设定JDK版本 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<!-- 指定source和target的版本 -->
+					<source>1.7</source>
+					<target>1.7</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

@@ -3,14 +3,14 @@ package org.htbn.sh.mole.common.bean;
 import java.util.List;
 import java.util.Set;
 
-import org.htbn.sh.mole.common.enums.ActionStatus;
+import org.htbn.sh.mole.common.enums.InstanceStatus;
 
 @SuppressWarnings("serial")
 public class MoleInstance<BizType,Result,BizId> extends MoleTemplate<BizType,Result>{
 	
 	private String instanceId;
 	
-	private ActionStatus insStatus;
+	private InstanceStatus insStatus;
 	
 	private Result insResult;
 	
@@ -31,11 +31,11 @@ public class MoleInstance<BizType,Result,BizId> extends MoleTemplate<BizType,Res
 		this.instanceId = instanceId;
 	}
 
-	public ActionStatus getInsStatus() {
+	public InstanceStatus getInsStatus() {
 		return insStatus;
 	}
 
-	public void setInsStatus(ActionStatus insStatus) {
+	public void setInsStatus(InstanceStatus insStatus) {
 		this.insStatus = insStatus;
 	}
 

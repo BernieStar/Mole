@@ -33,7 +33,7 @@ public class RedisUtils {
 	 * @param value
 	 * @return
 	 */
-	public boolean setValueCache(final String key, String value, Long expireTime) {
+	public boolean setValueCache(final String key, Object value, Long expireTime) {
 		boolean result = false;
 		try {
 			ValueOperations<Serializable, Object> operations =  redisTemplate.opsForValue();
@@ -159,4 +159,5 @@ public class RedisUtils {
 		SetOperations<Serializable, Object> operations = redisTemplate.opsForSet();
 		return operations.members(key);
 	}
+		
 }

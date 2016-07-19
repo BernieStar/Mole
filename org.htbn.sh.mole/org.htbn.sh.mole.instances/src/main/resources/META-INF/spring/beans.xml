@@ -26,6 +26,14 @@
 			</list>
 		</property>
 	</bean>
+	<bean id="propertiesReader"
+	  class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+	  <property name="locations">
+	   <list>
+	    <value>classpath:META-INF/instance.properties</value>
+	   </list>
+	  </property>
+	</bean>
 	<cache:annotation-driven cache-manager="cacheManager" />
 	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
 	    <property name="caches">

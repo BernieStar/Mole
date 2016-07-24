@@ -4,31 +4,71 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.htbn.sh.mole.common.enums.InstanceStatus;
+import org.htbn.sh.mole.common.enums.TemplateType;
 
+/**
+ * @param <BizType>
+ * @param <Result>
+ * @author : Bernie
+ * @Description : 模板实体类
+ */
 @SuppressWarnings("serial")
 public class MoleTemplate<BizType,Result> implements Serializable{
 
+	/**
+	 * 模板ID。
+	 */
 	private String templateId;
 	
+	/**
+	 * 模板名称。取名时尽量不要重复。
+	 */
 	private String templateName;
 	
-	//模板优先级，优先级值越大，优先级越高，为业务场景服务
+	/**
+	 * 模板类型，决定该模板产生的实例，初始运行动作与所依赖的节点的关系。
+	 */
+	private TemplateType type;
+	
+	/**
+	 * 该字段并非决定模板缓存时间，而是统一设置该类模板实现类缓存存放默认时间，在实例对象创建后，可以为每个实例单独设置缓存时间。
+	 */
+	private Long expireTime;
+	
+	/**
+	 * 模板优先级，优先级值越大，优先级越高，可以从业务出发进行资源优化配置，为业务场景服务。
+	 */
 	private int priority;
 
-	//模板内所有节点是否即时返回执行结果
+	/**
+	 * 引擎执行该模板产生的实例包含的所有节点默认是否即时返回执行结果。
+	 */
 	private boolean isSyn = true;
 	
-	//业务分类标识
+	/**
+	 * 业务分类标识，与业务相关
+	 */
 	private BizType bizType;
 	
-	//默认状态
+	/**
+	 * 默认实例初始状态。
+	 */
 	private InstanceStatus defaultStatus;
 	
-	//默认结果生，成模板时，由业务注入泛型默认结果
+	//
+	/**
+	 * 默认实例初始结果，生成模板时，由业务注入泛型默认结果。
+	 */
 	private Result defaultResult;
 	
+	/**
+	 * 默认包含节点的内部序号集合。节点序号与执行顺序无关。
+	 */
 	private Set<Integer> defaultNumbers;
 	
+	/**
+	 * 默认包含的节点ID集合。
+	 */
 	private Set<String> defaultActionTemplateIds;
 
 	public String getTemplateId() {
@@ -101,6 +141,22 @@ public class MoleTemplate<BizType,Result> implements Serializable{
 
 	public void setDefaultActionTemplateIds(Set<String> defaultActionTemplateIds) {
 		this.defaultActionTemplateIds = defaultActionTemplateIds;
+	}
+
+	public Long getExpireTime() {
+		return expireTime;
+	}
+
+	public void setExpireTime(Long expireTime) {
+		this.expireTime = expireTime;
+	}
+
+	public TemplateType getType() {
+		return type;
+	}
+
+	public void setType(TemplateType type) {
+		this.type = type;
 	}
 
 	

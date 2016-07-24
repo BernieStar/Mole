@@ -7,4 +7,11 @@
   </parent>
   <artifactId>org.htbn.sh.mole.templates</artifactId>
   <name>templates</name>
+  <dependencies>
+  	<dependency>
+  		<groupId>org.htbn.sh</groupId>
+  		<artifactId>org.htbn.sh.mole.analyzer</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>

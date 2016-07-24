@@ -2,7 +2,7 @@ package org.htbn.sh.mole.instances.factory;
 
 import java.util.List;
 
-import org.htbn.sh.mole.analyzer.InstanceAnalyzer;
+import org.htbn.sh.mole.analyzer.Analyzer;
 import org.htbn.sh.mole.analyzer.impl.SimpleInstanceAnalyzerImpl;
 import org.htbn.sh.mole.common.bean.MoleInstance;
 import org.htbn.sh.mole.common.bean.MoleTemplate;
@@ -10,14 +10,14 @@ import org.htbn.sh.mole.common.enums.InstanceStatus;
 import org.htbn.sh.mole.common.exception.InstanceAnalysisException;
 import org.htbn.sh.mole.common.util.BNBeanUtil;
 import org.htbn.sh.mole.common.util.BNIdUtil;
-import org.htbn.sh.mole.instances.redis.RedisUtils;
+import org.htbn.sh.mole.common.util.RedisUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class InstancesFactory <BizType,Result,BizBean,BizId>{
 	
 	private static final Logger logger = LoggerFactory.getLogger(InstancesFactory.class);
@@ -31,7 +31,7 @@ public class InstancesFactory <BizType,Result,BizBean,BizId>{
 	/**
 	 * 不同的业务流程采用不用的分析器，所以不自动注入，需通过代码操作来set一个实现。
 	 */
-	private InstanceAnalyzer<BizType,Result,BizId> instanceAnalyzer;
+	private Analyzer<MoleInstance<BizType,Result,BizId>> analyzer;
 	
 	public MoleInstance<BizType,Result,BizId> generateInsstance(BizType bizType,Result insResult,BizId bizId,MoleTemplate<BizType,Result> template, InstanceStatus insStatus){
 		
@@ -62,29 +62,34 @@ public class InstancesFactory <BizType,Result,BizBean,BizId>{
 	}
 	
 	public boolean analyseInstance(MoleInstance<BizType,Result,BizId> instance) throws InstanceAnalysisException{
-		if(instanceAnalyzer ==null){
-			instanceAnalyzer = new SimpleInstanceAnalyzerImpl<BizType, Result, BizId>();
+		if(analyzer ==null){
+			analyzer = new SimpleInstanceAnalyzerImpl<BizType, Result, BizId>();
 		}
 		try{
-			instance  = instanceAnalyzer.analyseForExecute(instance);
+			instance  = analyzer.analyseForExecute(instance);
 		}catch(Exception e){
 			throw new InstanceAnalysisException(e);
 		}
 		
-		return false;
+		return true;
 	}
 	
 	public boolean storeInstance(MoleInstance<BizType,Result,BizId> instance){
+		Long expireTime = instance.getExpireTime();
+		expireTime = expireTime==null? Long.valueOf(this.expireTime) :expireTime;
 		logger.debug("Instance expireTime is "+expireTime);
-		redisUtil.setValueCache(instance.getInstanceId(), instance, Long.valueOf(expireTime));
+		redisUtil.setValueCache(instance.getInstanceId(), instance, expireTime);
 		return true;
 	}
 
-	public InstanceAnalyzer<BizType,Result,BizId> getInstanceAnalyzer() {
-		return instanceAnalyzer;
+	public Analyzer<MoleInstance<BizType, Result, BizId>> getAnalyzer() {
+		return analyzer;
 	}
 
-	public void setInstanceAnalyzer(InstanceAnalyzer<BizType,Result,BizId> instanceAnalyzer) {
-		this.instanceAnalyzer = instanceAnalyzer;
+	public void setAnalyzer(Analyzer<MoleInstance<BizType, Result, BizId>> analyzer) {
+		this.analyzer = analyzer;
 	}
+	
+	
+	
 }

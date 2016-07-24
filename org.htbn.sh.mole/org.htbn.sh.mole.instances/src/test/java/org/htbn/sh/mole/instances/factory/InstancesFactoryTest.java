@@ -1,12 +1,12 @@
 package org.htbn.sh.mole.instances.factory;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import org.htbn.sh.mole.common.bean.MoleInstance;
 import org.htbn.sh.mole.common.bean.MoleTemplate;
 import org.htbn.sh.mole.common.enums.InstanceStatus;
 import org.htbn.sh.mole.common.util.BNIdUtil;
-import org.htbn.sh.mole.instances.redis.RedisUtils;
+import org.htbn.sh.mole.common.util.RedisUtils;
 import org.htbn.sh.mole.instances.test.SpringTestCase;
 import org.junit.BeforeClass;
 import org.junit.Test;

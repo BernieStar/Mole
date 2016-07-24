@@ -1,4 +1,4 @@
-package org.htbn.sh.mole.instances.redis;
+package org.htbn.sh.mole.common.util;
 
 import java.io.Serializable;
 import java.util.List;

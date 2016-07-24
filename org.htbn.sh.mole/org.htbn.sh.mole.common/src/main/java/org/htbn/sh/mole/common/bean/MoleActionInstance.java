@@ -18,7 +18,6 @@ public class MoleActionInstance<BizType,Result,BizBean> extends MoleActionTempla
 	private BizBean bizBean;
 	
 	
-	
 	//依赖该节点的实例ID
 	private List<Integer> branchInstanceIds;
 

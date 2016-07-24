@@ -9,7 +9,8 @@ import org.htbn.sh.mole.common.io.BizAction;
 
 /**
  * @author Bernie
- * 节点说明：
+ * @param
+ * @节点说明：
  */
 @SuppressWarnings("serial")
 public class MoleActionTemplate<BizType,Result,BizBean> implements Serializable{
@@ -22,6 +23,8 @@ public class MoleActionTemplate<BizType,Result,BizBean> implements Serializable{
 	private Integer number;
 	
 	private ActionType type;
+	
+	private Long expireTime;
 	
 	//是否即时返回执行结果
 	private boolean isSyn = true;
@@ -151,5 +154,14 @@ public class MoleActionTemplate<BizType,Result,BizBean> implements Serializable{
 	public void setBranchNumbers(List<Integer> branchNumbers) {
 		this.branchNumbers = branchNumbers;
 	}
+
+	public Long getExpireTime() {
+		return expireTime;
+	}
+
+	public void setExpireTime(Long expireTime) {
+		this.expireTime = expireTime;
+	}
+	
 	
 }

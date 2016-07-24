@@ -10,11 +10,6 @@
   <dependencies>
   	<dependency>
   		<groupId>org.htbn.sh</groupId>
-  		<artifactId>org.htbn.sh.mole.common</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.htbn.sh</groupId>
   		<artifactId>org.htbn.sh.mole.analyzer</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>

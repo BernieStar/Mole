@@ -1,0 +1,416 @@
+<html>
+<head lang="en">
+<meta charset="UTF-8">
+<title></title>
+<link href="style/content.min.css" rel="stylesheet" type="text/css">
+</head>
+<body style="width:1024px;padding:20px;margin:auto;">
+	<div class="editor-area" id="noteIFrameContent">
+		<div>
+			<span style="font-size: 18px;"><b>分布式业务流程处理框架</b></span>
+		</div>
+		<div>
+			<br>
+		</div>
+		<div>
+			代称： Mole 鼹鼠<br>
+			作者： Bernie <br>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<br style="background-color: inherit;">
+			</div>
+			<div style="text-align: left; background-color: rgb(255, 255, 255);">
+				<div style="text-align: left; background-color: rgb(255, 255, 255);">
+					<ul
+						style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal;">
+						<li><b>前言和背景</b></li>
+					</ul>
+					时下互联网行业风起云涌，SOA、服务治理逐渐成为业务架构解决方案主流趋势，应用解耦、分布式架构等技术框架和中间件技术发展也如火如荼。本人才疏学浅，但有幸参与一个基于高度业务抽象为背景的SAAS平台级项目的研究和开发工作，虽未取得什么成绩，但感觉脑洞大开，结合设计实现过程的一些反思，以及以往的一些不成熟的的经验，有了一点新的想法。
+				</div>
+				<div style="text-align: left; background-color: rgb(255, 255, 255);">构建该框架的一个重要目的，是想为业务分析阶段，架构设计之初，做业务解构，服务定位分析时，提供针对业务服务站点进行业务流程装配，有一定规律可循的解决方案。希望对一些需要构建SOA架构，但业务有一定负责度的业务场景的解构，可以提供一个参考。虽做不到庖丁解牛，但愿多一把杀猪刀。</div>
+				<div style="text-align: left; background-color: rgb(255, 255, 255);">
+					之说以叫Mole 鼹鼠，是为了叫起来方便，实际上叫 Mole Attack 打地鼠更形象，代号而已不必深究。</div>
+				<div style="text-align: left; background-color: rgb(255, 255, 255);">
+					打地鼠也体现了另一个目的，业务案件，很多场景需要多人多部门协调办公，夸企业，夸专业领域业务线上协作，流水线（包括一定的条件分支和迭代）操作虽是主流，但不应该缺乏人性化的灵活性，<span
+						style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">降低业务制约性，</span>才能更好的支撑和适应人机交互（人工智能除外），并极大利用统筹方法提高效率。所以该框架提倡预装配业务场景，但动态构建和扩展实例的流程运行模式。鼹鼠跳出来多不怕，手不快不怕，多些人多谢锤子一起抡。就是这样。
+				</div>
+				<div style="text-align: left; background-color: rgb(255, 255, 255);">
+					同样的，个人能力终究有限，眼界和思路一定会有局限性，所以也非常希望感兴趣并有开源精神和热情的的同学和我一起抡锤子打地鼠。</div>
+				<div style="text-align: left; background-color: rgb(255, 255, 255);">
+					<br>
+					<ul
+						style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal;">
+						<li><b
+							style="line-height: 1.5; background-color: rgb(255, 255, 255);">定位简介</b></li>
+					</ul>
+				</div>
+				<div
+					style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left; background-color: rgb(255, 255, 255);">应用于SAAS平台场景装配</div>
+				<div
+					style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left; background-color: rgb(255, 255, 255);">以流程模板对应场景</div>
+				<div
+					style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left; background-color: rgb(255, 255, 255);">以节点任务为核心进行运转</div>
+				<div
+					style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left; background-color: rgb(255, 255, 255);">
+					<span style="line-height: 1.5;">基于SOA架构，具备横向扩容能力</span>
+				</div>
+				支持实例特例化，不完全依照模板运行
+			</div>
+			<div
+				style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; text-align: left; background-color: rgb(255, 255, 255);">
+				<br>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<br style="background-color: inherit;">
+			</div>
+			<div
+				style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; text-align: left; background-color: rgb(255, 255, 255);">
+				<ul>
+					<li><b
+						style="line-height: 1.5; background-color: rgb(255, 255, 255);">特点简介</b></li>
+				</ul>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">业务场景装配用于定制化扩展</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">流程处理框架，但不采用工作流运行模式</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">与业务进行隔离，不关心职责与权限</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<span
+					style="line-height: 1.5; background-color: rgb(255, 255, 255);">执行引擎处理节点任务，节点并行异步处理机制和短依赖路径同步处理机制分工协作</span>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">实例管理器专门负责流程实例状态管理</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<span
+					style="line-height: 1.5; background-color: rgb(255, 255, 255);">适用业务流程场景，即时相应要求低，所以任务执行与流程状态管理采用异步机制，架构设计上进行隔离，便于采用分布式架构常用组件或技术进行性能扩容</span>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<span
+					style="line-height: 1.5; background-color: rgb(255, 255, 255);">模板装配时由任务节点间依赖关系，代替顺序、并行、同步、分支、聚合、循环等工作流运行模式，任务与任务之间无强事务性要求。</span>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">基于spring，DB，可用于用于单应用运行</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<span
+					style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">基于Dubbo实现扩展，适用于SOA</span><br>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<br>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<br>
+			</div>
+			<div
+				style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; text-align: left; background-color: rgb(255, 255, 255);">
+				<ul>
+					<li><span style="line-height: 1.5;"><b>组成部分</b></span></li>
+				</ul>
+			</div>
+		</div>
+		<div>
+			<br>
+		</div>
+		<div>
+			<br>
+		</div>
+		<div
+			style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; text-align: left; background-color: rgb(255, 255, 255);">
+			<b style="background-color: inherit;"><span
+				style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; text-align: left; background-color: rgb(255, 255, 255);">1、</span><span
+				style="background-color: inherit;">Scene Interface（</span><span
+				style="background-color: rgb(255, 255, 255);"><span
+					style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; text-align: left; background-color: rgb(255, 255, 255);">业务场景定制化扩展点，无实现，定位为以分析报告的形式阐述业务解构的方法论</span><span
+					style="font-weight: normal;">）</span></span></b>
+		</div>
+		<div
+			style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+			<br>
+		</div>
+		<div
+			style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+			<b style="background-color: inherit;">2、<span
+				style="background-color: inherit;">Mole Interface（Mole Open </span><span
+				style="background-color: inherit;">API）</span></b>
+		</div>
+		<div
+			style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+			<br>
+		</div>
+		<div
+			style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+			<span style="background-color: inherit;"><div
+					style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; text-align: left;">
+					<b style="background-color: inherit;">3、<span
+						style="background-color: inherit;">Mole Template Manager （</span><span
+						style="background-color: inherit;">模板管理器）</span></b>
+				</div>
+				<div
+					style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+					<br>
+				</div></span>
+		</div>
+		<div
+			style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+			<b style="background-color: inherit;">4、<span
+				style="background-color: inherit;">Instance Container
+					Manager（实例上下文容器）</span></b>
+		</div>
+		<div
+			style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+			<br>
+		</div>
+		<div
+			style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+			<b style="background-color: inherit;"><span
+				style="background-color: inherit;">5、</span><span
+				style="background-color: inherit;">Mole Execute Engine （</span><span
+				style="background-color: inherit;">执行引擎）</span></b>
+		</div>
+		<div
+			style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+			<br>
+		</div>
+		<div
+			style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+			<b style="background-color: inherit;">6、<span
+				style="background-color: inherit;">Mole Instance Monitor （</span><span
+				style="background-color: inherit;">实例监控器）</span></b>
+		</div>
+		<div
+			style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+			<br>
+		</div>
+		<div
+			style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+			<b style="background-color: inherit;">7、 Mole Analyzer（分析器）</b>
+		</div>
+		<div
+			style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+			<br>
+		</div>
+		<div
+			style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+			<b style="background-color: inherit;">8、Mole Commen （共通包）</b>
+		</div>
+		<div
+			style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+			<br>
+		</div>
+		<div>
+			<br>
+		</div>
+		<div>
+			<span style="line-height: 1.5;"></span>
+		</div>
+		<div>
+			<span style="line-height: 1.5;"><br></span>
+		</div>
+		<div>
+			<img style="height: 432px; width: 629.508px;"
+				src="http://note.youdao.com/yws/public/resource/9c8b226eb2872288ad64a750a75b330a/AECB76D1A7C54CED8E022925E84EE313"
+				data-media-type="image">
+		</div>
+		<div>
+			<br>
+		</div>
+		<div>模块依赖并不完全准确，仅是示意图。</div>
+		<div>
+			<br>
+		</div>
+		<div>
+			<ul>
+				<li><b>模块简介</b></li>
+			</ul>
+		</div>
+		<div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<span
+					style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;"><br></span>
+			</div>
+			<div
+				style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; text-align: left; background-color: rgb(255, 255, 255);">
+				<b><span
+					style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; text-align: left; background-color: rgb(255, 255, 255);">1、</span><span
+					style="background-color: inherit;">Scene Interface（</span><span
+					style="background-color: rgb(255, 255, 255);">业务场景API，业务定制化扩展点）</span></b>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">说明：</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				该部分需要基于具体业务产生形成方案，可以对流程中一个节点或多个节点进行封装，并对外提供业务级接口。</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">根据需要具有局部业务事务性，或非原子性操作，即可以具备中间状态。</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">第一个版本开发完成后会提供一些
+				Biz Demo 做分析论述。</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<span style="background-color: rgb(255, 255, 255);"><br></span>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<span style="background-color: rgb(255, 255, 255);"><br></span>
+			</div>
+			<div
+				style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; text-align: left; background-color: rgb(255, 255, 255);">
+				<b>2、<span style="background-color: inherit;">Mole
+						Interface（Mole Open </span><span style="background-color: inherit;">API）</span></b>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<span
+					style="line-height: 1.5; background-color: rgb(255, 255, 255);">说明：
+					Mole接口模块负责封装所有对外暴露的操作接口</span><span
+					style="line-height: 1.5; background-color: rgb(255, 255, 255);">。</span>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<span style="background-color: inherit;"><br></span>
+			</div>
+			<div
+				style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; text-align: left; background-color: rgb(255, 255, 255);">
+				<span style="background-color: inherit;"><div
+						style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; text-align: left; background-color: rgb(255, 255, 255);">
+						<b>3、<span style="background-color: inherit;">Mole
+								Template Manager （</span><span style="background-color: inherit;">模板管理器）</span></b>
+					</div>
+					<div
+						style="font-weight: normal; color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; text-align: left; background-color: rgb(255, 255, 255);">说明：模板读写接口。</div>
+					<div
+						style="font-weight: normal; color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; text-align: left; background-color: rgb(255, 255, 255);">模板操作服务，提供模板的创建工厂，节点模板的创建工厂，模板存储，模板读取，等基本操作接口。</div>
+					<br></span>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<br>
+			</div>
+			<div
+				style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; text-align: left; background-color: rgb(255, 255, 255);">
+				<b>4、<span style="background-color: inherit;">Instance
+						Container Manager（实例上下文容器）</span></b>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">说明：</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				实例容器，根据规则将流程实例对象结构化计算后进行缓存（ehcache、memcache等，根据容量进选择实现方案）。提供<span
+					style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">针对实例的底层操作接口，提供更具通用性和无状态性的操作。</span>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<span
+					style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;"><br></span>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">两种分布式设计方案：</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">1）、直接使用通过客户端访问缓存集群。</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">优点是实现简单，缺点是不适用在实例中封装过多层业务对象的场景。序列化和反序列化可解决一定范围的问题，但有一定的掣肘。</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">版本1优先实现该方案以便于做业务验证。</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<br>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">2）、分布式解耦方案，通过微服务接口对外提供读写操作。</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">可以使用dubbo框架、或MQ实现</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">缺点是实现稍复杂，有一定的效率损耗。</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">优点是实例中可以封装复杂业务对象，扩展灵活，分布式事务可操作性强。</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">重点是可以从业务角度，考虑率负载均衡路由策略的实现，以及业务场景对分布式事务的要求来综合考虑。后续进行专门分析。</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<br>
+			</div>
+			<div
+				style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; text-align: left; background-color: rgb(255, 255, 255);">
+				<b><span style="line-height: 1.5;">5、</span><span
+					style="line-height: 1.5;">Mole Execute Engine （</span><span
+					style="line-height: 1.5;">执行引擎）</span></b>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				说明：要让执行引擎并行驱动任务，并切具有分布式架构横向扩展能力，首先考虑的就是去状态化，所以执行引擎的核心思想是不关注业务，只负责执行，以及反馈执行结果。所以执行前需要调用实例的业务校验、Assign等操作服务接口，执行后，需要调度实例状态同步计算工作，而这个环节，与业务相关，所以需要提供可扩展接口，由业务组件完成实现。所以执行引擎的定位是开放的，在<span
+					style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">Scene
+					Interface模块</span>不断增加业务密度的前提下才能更好的完成工作。
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<span style="background-color: inherit;"><br></span>
+			</div>
+			<div
+				style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; text-align: left; background-color: rgb(255, 255, 255);">
+				<b>6、<span style="background-color: inherit;">Mole
+						Instance Monitor （</span><span style="background-color: inherit;">实例监控器）</span></b>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">说明：实例监控器，即状态监控器，负责实时读取实例的执行状态和执行结果，由于和业务相关，所以实例监控器除读写基本功能外，还包括状态的事务管理，运算逻辑的业务扩展。即是console，又是状态服务机。</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<br>
+			</div>
+			<div
+				style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; text-align: left; background-color: rgb(255, 255, 255);">
+				<b>7、 Mole Analyzer（分析器）</b>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">基于框架本身的流程及实例的
+				analysis，并提供业务 analysis的扩展接口。 analysis可能包括
+				validation、assign、dependenc relationship、audit trail等。</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<br>
+			</div>
+			<div
+				style="color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; text-align: left; background-color: rgb(255, 255, 255);">
+				<b>8、Mole Commen （共通包）</b>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">包括公共entity，commen
+				tools、enum等定义。</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<span style="background-color: inherit;"><br></span>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<span style="background-color: inherit;"><br></span>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<br>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<span style="background-color: inherit;"><br></span>
+			</div>
+			<div
+				style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: 微软雅黑; font-size: 14px; font-style: normal; font-weight: normal; text-align: left;">
+				<span style="background-color: inherit;"><br></span>
+			</div>
+			<br>
+		</div>
+		<div>
+			<br>
+		</div>
+	</div>
+
+
+</body>
+</html>
